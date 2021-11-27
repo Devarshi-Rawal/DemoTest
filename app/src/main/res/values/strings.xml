@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DemoTest</string>
+    <string name="to_next_activity">To next activity</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="or_sign_in_with_google">or sign in with Google</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="login">LOGIN</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="intermediate_screen">Intermediate Screen</string>
+</resources>
