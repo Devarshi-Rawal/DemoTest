@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -60,6 +62,13 @@ public class HomeScreenActivity extends AppCompatActivity {
                 toIntermediateActivity();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menulist,menu);
+        return true;
     }
 
     public void toIntermediateActivity(){
