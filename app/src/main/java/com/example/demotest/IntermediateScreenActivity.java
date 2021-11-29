@@ -76,19 +76,22 @@ public class IntermediateScreenActivity extends AppCompatActivity {
             }
         });
 
-        View.OnClickListener listener = new View.OnClickListener() {
+        Button buttonBackToLog = (Button) findViewById(R.id.buttonBackLogin);
+        buttonBackToLog.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
-                if(view == findViewById(R.id.buttonBackLogin)){
+
+                Intent intent = new Intent(IntermediateScreenActivity.this,LoginScreenActivity.class);
+                startActivity(intent);
+
+                /*if(view == findViewById(R.id.buttonBackLogin)){
                     Fragment fragment = new LoginFragment();
                 }
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.commit();
+                transaction.commit();*/
             }
-        };
-
-        Button buttonBackToLog = (Button) findViewById(R.id.buttonBackLogin);
-        buttonBackToLog.setOnClickListener(listener);
+        });
 
         buttonHomeScreen.setOnClickListener(new View.OnClickListener() {
             @Override

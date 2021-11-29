@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void backToLog(){
 
-        Intent intent = new Intent(this, LoginFragment.class);
+        Intent intent = new Intent(this, LoginScreenActivity.class);
         startActivity(intent);
     }
 
