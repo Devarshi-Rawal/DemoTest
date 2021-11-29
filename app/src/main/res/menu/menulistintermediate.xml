@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/itemEd"
+        android:title="Employee Details"/>
+
+    <item android:id="@+id/itemAd"
+        android:title="Address Details"/>
+
+    <item android:id="@+id/itemSd"
+        android:title="Salary Details"/>
+
+    <item android:id="@+id/itemEh"
+        android:title="Employee History"/>
+
+</menu>

@@ -1,11 +1,20 @@
 package com.example.demotest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,11 +31,23 @@ public class IntermediateScreenActivity extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 100;
+    Intent intent;
+
+    private static final String APP_SHARED_PREFS = "asdasd_preferences";
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
+    private boolean isUserLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intermediate_screen);
+
+        sharedPrefs = getApplicationContext().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+        isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+        editor = sharedPrefs.edit();
+        editor.putBoolean("userLoggedInState", true);
+        editor.commit();
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -55,12 +76,19 @@ public class IntermediateScreenActivity extends AppCompatActivity {
             }
         });
 
-        buttonBackToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
+        View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View view) {
-                backToLogin();
+                if(view == findViewById(R.id.buttonBackLogin)){
+                    Fragment fragment = new LoginFragment();
+                }
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.commit();
             }
-        });
+        };
+
+        Button buttonBackToLog = (Button) findViewById(R.id.buttonBackLogin);
+        buttonBackToLog.setOnClickListener(listener);
 
         buttonHomeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,14 +99,67 @@ public class IntermediateScreenActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menulistintermediate,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        
+        switch (item.getItemId()){
+            
+            case R.id.itemEd:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(this, "Employee Details unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.itemAd:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Address Details unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+
+            case R.id.itemSd:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Salary Details unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+
+            case R.id.itemEh:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Employee History unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    public void backToLogin(){
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
     }
 
     public void backToHome(){

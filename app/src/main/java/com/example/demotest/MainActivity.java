@@ -1,12 +1,19 @@
 package com.example.demotest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -20,12 +27,25 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
-    private static int RC_SIGN_IN = 100;
+    private static final int RC_SIGN_IN = 100;
+    Intent intent;
+    GoogleSignInAccount account;
+
+    private static final String APP_SHARED_PREFS = "asdasd_preferences";
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
+    private boolean isUserLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPrefs = getApplicationContext().getSharedPreferences(APP_SHARED_PREFS, Context.MODE_PRIVATE);
+        isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+        editor = sharedPrefs.edit();
+        editor.putBoolean("userLoggedInState", true);
+        editor.commit();
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -37,11 +57,14 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Check for existing Google Sign In account, if the user is already signed in
-// the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        // the GoogleSignInAccount will be non-null.
+        account= GoogleSignIn.getLastSignedInAccount(this);
 
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = findViewById(R.id.sign_in_button);
+        Button buttonNa = findViewById(R.id.buttonNextActivity);
+        Button buttonBlog = findViewById(R.id.buttonBackLog);
+
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -51,11 +74,81 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonNa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toIntermediateActivity();
+            }
+        });
+
+        buttonBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                backToLog();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menulist,menu);
+        this.invalidateOptionsMenu();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.item1:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(this, "Employee Details unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.item2:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Address Details unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.item3:
+                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
+                if (isUserLoggedIn) {
+                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Salary Details unlocked", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public void toIntermediateActivity(){
+        Intent intent = new Intent(this, IntermediateScreenActivity.class);
+        startActivity(intent);
     }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    public void backToLog(){
+
+        Intent intent = new Intent(this, LoginFragment.class);
+        startActivity(intent);
     }
 
     @Override
@@ -86,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(this, "Welcome " + personName + "!", Toast.LENGTH_SHORT).show();
             }
-            startActivity(new Intent(this,HomeScreenActivity.class));
+            startActivity(new Intent(this,IntermediateScreenActivity.class));
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
