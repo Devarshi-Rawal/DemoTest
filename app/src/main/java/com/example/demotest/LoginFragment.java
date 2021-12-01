@@ -99,7 +99,6 @@ public class LoginFragment extends Fragment {
 
                 Toast.makeText(getActivity(), "Welcome " + personName + "!", Toast.LENGTH_SHORT).show();
             }
-            startActivity(new Intent(getActivity(), MainActivity.class));
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
     private boolean isUserLoggedIn;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +87,28 @@ public class MainActivity extends AppCompatActivity {
         buttonBlog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                backToLog();
+                toLog();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     @Override
@@ -145,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    public void backToLog(){
+    public void toLog(){
 
         Intent intent = new Intent(this, LoginScreenActivity.class);
         startActivity(intent);
@@ -179,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(this, "Welcome " + personName + "!", Toast.LENGTH_SHORT).show();
             }
-            startActivity(new Intent(this,IntermediateScreenActivity.class));
+            startActivity(new Intent(this,PrivacyDetailsActivity.class));
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

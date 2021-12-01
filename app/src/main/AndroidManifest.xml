@@ -13,14 +13,15 @@
         android:theme="@style/Theme.DemoTest">
         <activity
             android:name=".LoginScreenActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:noHistory="true"/>
         <activity
             android:name=".PrivacyDetailsActivity"
-            android:exported="true"
-            android:noHistory="true" />
+            android:exported="true" />
         <activity
             android:name=".IntermediateScreenActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:noHistory="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

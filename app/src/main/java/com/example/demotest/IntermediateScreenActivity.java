@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +39,7 @@ public class IntermediateScreenActivity extends AppCompatActivity {
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
     private boolean isUserLoggedIn;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class IntermediateScreenActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
         Button buttonBackToLogin = findViewById(R.id.buttonBackLogin);
-        Button buttonHomeScreen = findViewById(R.id.buttonHomeS);
+//        Button buttonHomeScreen = findViewById(R.id.buttonHomeS);
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
 
@@ -93,13 +96,32 @@ public class IntermediateScreenActivity extends AppCompatActivity {
             }
         });
 
-        buttonHomeScreen.setOnClickListener(new View.OnClickListener() {
+        /*buttonHomeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 backToHome();
             }
-        });
+        });*/
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     @Override
@@ -165,10 +187,6 @@ public class IntermediateScreenActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    public void backToHome(){
-        finish();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -197,7 +215,7 @@ public class IntermediateScreenActivity extends AppCompatActivity {
 
                 Toast.makeText(this, "Welcome " + personName + "!", Toast.LENGTH_SHORT).show();
             }
-            finish();
+            startActivity(new Intent(IntermediateScreenActivity.this,PrivacyDetailsActivity.class));
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
