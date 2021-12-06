@@ -2,6 +2,8 @@ package com.example.demotest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -30,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 100;
-    Intent intent;
     GoogleSignInAccount account;
 
     private static final String APP_SHARED_PREFS = "asdasd_preferences";
@@ -38,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private boolean isUserLoggedIn;
     boolean doubleBackToExitPressedOnce = false;
+
+    ConstraintLayout constraintLayoutLf;
+    ConstraintLayout constraintLayoutHs;
+
+    ImageView imageViewCf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        account= GoogleSignIn.getLastSignedInAccount(this);
+        account = GoogleSignIn.getLastSignedInAccount(this);
 
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = findViewById(R.id.sign_in_button);
@@ -69,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
         Button buttonBlog = findViewById(R.id.buttonBackLog);
 
         signInButton.setSize(SignInButton.SIZE_STANDARD);
+
+        constraintLayoutLf = findViewById(R.id.loginFragmentCl);
+        constraintLayoutHs = findViewById(R.id.homeScreenCl);
+
+        imageViewCf = findViewById(R.id.fragmentCloseView);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
@@ -114,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menulist,menu);
+        menuInflater.inflate(R.menu.menulist, menu);
         this.invalidateOptionsMenu();
         return true;
     }
@@ -122,33 +134,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.item1:
-                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
-                if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(this, "Employee Details unlocked", Toast.LENGTH_SHORT).show();
-                }
-                return true;
             case R.id.item2:
-                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
-                if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Address Details unlocked", Toast.LENGTH_SHORT).show();
-                }
-                return true;
             case R.id.item3:
                 isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
                 if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                    constraintLayoutLf.setVisibility(View.VISIBLE);
+                    constraintLayoutHs.setVisibility(View.GONE);
+
+                    imageViewCf.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            constraintLayoutLf.setVisibility(View.GONE);
+                            constraintLayoutHs.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
-                else {
-                    Toast.makeText(this, "Salary Details unlocked", Toast.LENGTH_SHORT).show();
+                else{
+                    constraintLayoutLf.setVisibility(View.GONE);
+                    constraintLayoutHs.setVisibility(View.VISIBLE);
                 }
                 return true;
             default:
@@ -157,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void toIntermediateActivity(){
+    public void toIntermediateActivity() {
         Intent intent = new Intent(this, IntermediateScreenActivity.class);
         startActivity(intent);
     }
@@ -167,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    public void toLog(){
+    public void toLog() {
 
         Intent intent = new Intent(this, LoginScreenActivity.class);
         startActivity(intent);
@@ -201,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(this, "Welcome " + personName + "!", Toast.LENGTH_SHORT).show();
             }
-            startActivity(new Intent(this,PrivacyDetailsActivity.class));
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

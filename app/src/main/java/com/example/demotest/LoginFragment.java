@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -54,6 +56,7 @@ public class LoginFragment extends Fragment {
 
         // Set the dimensions of the sign-in button.
         SignInButton signInButton = view.findViewById(R.id.sign_in_button);
+
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         signInButton.setOnClickListener(new View.OnClickListener() {

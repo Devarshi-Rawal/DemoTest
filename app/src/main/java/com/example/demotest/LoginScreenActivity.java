@@ -24,7 +24,6 @@ public class LoginScreenActivity extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
     private static int RC_SIGN_IN = 100;
-    SignInButton signInButton;
     ImageView imageViewCl;
 
     boolean doubleBackToExitPressedOnce = false;

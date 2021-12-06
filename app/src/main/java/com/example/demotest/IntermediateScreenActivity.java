@@ -2,6 +2,7 @@ package com.example.demotest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -40,6 +42,10 @@ public class IntermediateScreenActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     private boolean isUserLoggedIn;
     boolean doubleBackToExitPressedOnce = false;
+
+    ConstraintLayout constraintLayoutLf1, constraintLayoutIs;
+
+    ImageView imageViewLfClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +71,12 @@ public class IntermediateScreenActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        Button buttonBackToLogin = findViewById(R.id.buttonBackLogin);
-//        Button buttonHomeScreen = findViewById(R.id.buttonHomeS);
-
         SignInButton signInButton = findViewById(R.id.sign_in_button);
+
+        constraintLayoutLf1 = findViewById(R.id.loginFragmentCl1);
+        constraintLayoutIs = findViewById(R.id.intermediateScreenCl);
+
+        imageViewLfClose = findViewById(R.id.fragmentCloseView1);
 
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
@@ -79,22 +87,15 @@ public class IntermediateScreenActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonBackToLog = (Button) findViewById(R.id.buttonBackLogin);
+        /*Button buttonBackToLog = (Button) findViewById(R.id.buttonBackLogin);
         buttonBackToLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(IntermediateScreenActivity.this,LoginScreenActivity.class);
                 startActivity(intent);
-
-                /*if(view == findViewById(R.id.buttonBackLogin)){
-                    Fragment fragment = new LoginFragment();
-                }
-                FragmentManager manager = getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.commit();*/
             }
-        });
+        });*/
 
         /*buttonHomeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,41 +140,25 @@ public class IntermediateScreenActivity extends AppCompatActivity {
         switch (item.getItemId()){
             
             case R.id.itemEd:
-                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
-                if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(this, "Employee Details unlocked", Toast.LENGTH_SHORT).show();
-                }
-                return true;
+            case R.id.itemEh:
+            case R.id.itemSd:
             case R.id.itemAd:
                 isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
                 if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Address Details unlocked", Toast.LENGTH_SHORT).show();
-                }
-                return true;
+                    constraintLayoutLf1.setVisibility(View.VISIBLE);
+                    constraintLayoutIs.setVisibility(View.GONE);
 
-            case R.id.itemSd:
-                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
-                if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
+                    imageViewLfClose.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            constraintLayoutLf1.setVisibility(View.GONE);
+                            constraintLayoutIs.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
-                else {
-                    Toast.makeText(this, "Salary Details unlocked", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-
-            case R.id.itemEh:
-                isUserLoggedIn = sharedPrefs.getBoolean("userLoggedInState", false);
-                if (isUserLoggedIn) {
-                    Toast.makeText(this, "Please log in using google sign in", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Employee History unlocked", Toast.LENGTH_SHORT).show();
+                else{
+                    constraintLayoutLf1.setVisibility(View.GONE);
+                    constraintLayoutIs.setVisibility(View.VISIBLE);
                 }
                 return true;
 
@@ -215,7 +200,6 @@ public class IntermediateScreenActivity extends AppCompatActivity {
 
                 Toast.makeText(this, "Welcome " + personName + "!", Toast.LENGTH_SHORT).show();
             }
-            startActivity(new Intent(IntermediateScreenActivity.this,PrivacyDetailsActivity.class));
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
