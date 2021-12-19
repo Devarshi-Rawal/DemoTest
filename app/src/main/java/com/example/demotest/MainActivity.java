@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         account = GoogleSignIn.getLastSignedInAccount(this);
 
         // Set the dimensions of the sign-in button.
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
+        SignInButton signInButton = findViewById(R.id.sign_in_button_main);
         Button buttonNa = findViewById(R.id.buttonNextActivity);
         Button buttonBlog = findViewById(R.id.buttonBackLog);
 

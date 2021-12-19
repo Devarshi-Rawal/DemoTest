@@ -71,7 +71,7 @@ public class IntermediateScreenActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
+        SignInButton signInButton = findViewById(R.id.sign_in_button_intermediate);
 
         constraintLayoutLf1 = findViewById(R.id.loginFragmentCl1);
         constraintLayoutIs = findViewById(R.id.intermediateScreenCl);
